@@ -1,33 +1,46 @@
-const { makeWASocket, useMultiFileAuthState} = require('@whiskeysockets/baileys');
-const handleMessage = require('./handler');
-const QRcode = require('qrcode');
+const { makeWASocket, useMultiFileAuthState } = require(’@whiskeysockets/baileys’)
+const QRCode = require(‘qrcode’)
+const handleMessage = require(’./handler’)
 
 async function startPair(number, mode) {
-    const { state, saveCreds } = await useMultiFileAuthState(`sessions/${number}`);
+const { state, saveCreds } = await useMultiFileAuthState(sessions/${number})
+const crazy = makeWASocket({ auth: state })
 
-    const crazy = makeWASocket({
-        auth: state,
-        printQRInTerminal: true,
-    });
+crazy.ev.on(‘creds.update’, saveCreds)
+crazy.ev.on(‘messages.upsert’, handleMessage(sock))
 
-    crazy.ev.on('creds.update', saveCreds);
-    crazy.ev.on('messages.upsert', handleMessage(crazy));
-
-    crazy.ev.on('connection.update', async (update) => {
-        if (update.qr && mode === 'qr') {
-            qrImage = await QRcode.toDataURL(update.qr);
-        }
-});
-if (mode === 'pair' && !state.creds.registered) {
-    const code = await crazy.requestPairingCode(number);
-    return { type: 'pair', data: code };
+if (mode === ‘pair’ && !state.creds.registered) {
+try {
+const code = await crazy.requestPairingCode(number)
+return { type: ‘pair’, data: code }
+} catch (err) {
+console.error(‘Erreur Pairing Code:’, err)
+return { type: ‘error’, data: err.message }
 }
-if (mode === 'qr') {
-    await new Promise(r => setTimeout(r, 1500));
-    return { type: 'qr', data: qrImage };
-}};
+}
 
+if (mode === ‘qr’) {
+return new Promise((resolve, reject) => {
+const timeout = setTimeout(() => reject(new Error(‘QR timeout’)), 15000)
+crazy.ev.on(‘connection.update’, async (update) => {
+try {
+if (update.qr) {
+clearTimeout(timeout)
+const qrImage = await QRCode.toDataURL(update.qr)
+resolve({ type: ‘qr’, data: qrImage })
+}
+if (update.connection === ‘close’) {
+console.log(‘Connexion fermée:’, update.lastDisconnect?.error)
+}
+if (update.connection === ‘open’) {
+console.log(‘Connecté à WhatsApp’)
+}
+} catch (err) {
+reject(err)
+}
+})
+})
+}
+}
 
-module.exports = { startPair};
-
-
+module.exports = { startPair }
