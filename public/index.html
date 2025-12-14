@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRAZY MINI MD</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+    }
+
+    .card {
+      width: 360px;
+      background: #020617;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.65);
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      color: #3b82f6;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      opacity: 0.75;
+      margin-bottom: 22px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input, select {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    button {
+      margin-top: 16px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    .result {
+      margin-top: 20px;
+      min-height: 70px;
+      background: #0f172a;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      font-size: 16px;
+      letter-spacing: 2px;
+      word-break: break-word;
+    }
+
+    .result img {
+      max-width: 220px;
+      border-radius: 8px;
+    }
+
+    .footer {
+      margin-top: 16px;
+      font-size: 11px;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="logo">CRAZY MINI MD</div>
+    <div class="subtitle">Connexion WhatsApp sécurisée</div>
+
+    <input id="number" type="text" placeholder="241XXXXXXXX" />
+
+    <select id="mode">
+      <option value="pair">Pairing Code</option>
+      <option value="qr">QR Code</option>
+    </select>
+
+    <button onclick="connectBot()">CONNECTER</button>
+
+    <div class="result" id="result">
+      En attente...
+    </div>
+
+    <div class="footer">© CRAZY MINI MD</div>
+  </div>
+
+  <script>
+    async function connectBot() {
+      const number = document.getElementById('number').value.trim()
+      const mode = document.getElementById('mode').value
+      const result = document.getElementById('result')
+
+      if (!number) {
+        result.innerText = 'Numéro requis'
+        return
+      }
+
+      result.innerText = 'Connexion en cours...'
+
+      try {
+        const res = await fetch('/connect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ number, mode })
+        })
+
+        const data = await res.json()
+
+        if (data.type === 'pair') {
+          result.innerHTML = '<b>PAIR CODE</b><br>' + data.data
+        }
+
+        if (data.type === 'qr') {
+          result.innerHTML = '<img src=\"' + data.data + '\" />'
+        }
+
+      } catch (e) {
+        result.innerText = 'Erreur de connexion'
+      }
+    }
+  </script>
+</body>
+</html>
