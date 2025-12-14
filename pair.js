@@ -19,7 +19,7 @@ async function startPair(number, mode) {
         }
 });
 if (mode === 'pair' && !state.creds.registered) {
-    const code = await crazy.generatePairingCode(number);
+    const code = await crazy.requestPairingCode(number);
     return { type: 'pair', data: code };
 }
 if (mode === 'qr') {
@@ -29,3 +29,4 @@ if (mode === 'qr') {
 
 
 module.exports = { startPair};
+
