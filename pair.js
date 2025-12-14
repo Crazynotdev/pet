@@ -27,4 +27,5 @@ if (mode === 'qr') {
     return { type: 'qr', data: qrImage };
 }};
 
-modules.exports = { startPair};
+
+module.exports = { startPair};
