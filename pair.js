@@ -7,7 +7,7 @@ async function startPair(number, mode) {
 
     const crazy = makeWASocket({
         auth: state,
-        printQRInTerminal: mode === 'qr',
+        printQRInTerminal: true,
     });
 
     crazy.ev.on('creds.update', saveCreds);
@@ -29,4 +29,5 @@ if (mode === 'qr') {
 
 
 module.exports = { startPair};
+
 
