@@ -1,0 +1,22 @@
+{
+  "name": "crazy-mini-md",
+  "version": "1.0.0",
+  "description": "CRAZY MINI MD - WhatsApp Pairing App by Crazy Dev",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server ./ --port=3000",
+    "dev": "live-server ./ --port=3000"
+  },
+  "keywords": [
+    "whatsapp",
+    "pairing",
+    "crazy-mini-md",
+    "frontend"
+  ],
+  "author": "Crazy Dev",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
