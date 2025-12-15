@@ -1,293 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CRAZY MINI MD | Pairing</title>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRAZY MINI MD | Pairing</title>
+    <link rel="stylesheet" href="./css/pair.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Inter", sans-serif;
-    }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
 
-    body {
-      height: 100vh;
-      background: radial-gradient(circle at top, #0f2027, #000);
-      color: #fff;
-      overflow: hidden;
-    }
+      body {
+        height: 100vh;
+        background: radial-gradient(circle at top, #0f2027, #000);
+        color: #fff;
+        overflow: hidden;
+      }
 
-    /* Background particles */
-    #particles {
-      position: fixed;
-      inset: 0;
-      background: url("https://www.transparenttextures.com/patterns/dark-matter.png");
-      opacity: 0.3;
-      z-index: 0;
-    }
+      /* Particle Background */
+      #particles {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+      }
 
-    /* Layout */
-    .container {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+      /* Layout */
+      .container {
+        position: relative;
+        z-index: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
 
-    .main-content {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      padding: 20px;
-    }
+      .main-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 20px;
+      }
 
-    /* Logo */
-    .logo-section {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+      /* Logo */
+      .logo-section {
+        text-align: center;
+        margin-bottom: 25px;
+      }
 
-    .logo {
-      width: 90px;
-      filter: drop-shadow(0 0 15px #00f7ff);
-    }
-
-    .logo-text {
-      margin-top: 12px;
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      background: linear-gradient(90deg, #00f7ff, #8f00ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Card */
-    .card {
-      width: 100%;
-      max-width: 380px;
-      padding: 35px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 40px rgba(0, 247, 255, 0.15);
-      text-align: center;
-    }
-
-    .card h1 {
-      font-size: 1.6rem;
-      margin-bottom: 8px;
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin-bottom: 25px;
-    }
-
-    /* Form */
-    .form-group {
-      text-align: left;
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      font-size: 0.8rem;
-      opacity: 0.8;
-    }
-
-    .form-group input {
-      width: 100%;
-      margin-top: 6px;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      outline: none;
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-      font-size: 0.95rem;
-    }
-
-    .form-group input::placeholder {
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    /* Button */
-    .generate-btn {
-      width: 100%;
-      padding: 14px;
-      border-radius: 14px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      background: linear-gradient(135deg, #00f7ff, #8f00ff);
-      color: #000;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .generate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 25px rgba(143, 0, 255, 0.6);
-    }
-
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 15px;
-      font-size: 0.75rem;
-      opacity: 0.5;
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-
-    .modal {
-      width: 90%;
-      max-width: 330px;
-      padding: 30px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 20px;
-      backdrop-filter: blur(18px);
-      text-align: center;
-      box-shadow: 0 0 30px rgba(0, 247, 255, 0.25);
-    }
-
-    .modal-icon {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: #00f7ff;
-    }
-
-    .code-display {
-      margin: 20px 0;
-    }
-
-    .code-text {
-      font-size: 1.4rem;
-      letter-spacing: 3px;
-      font-weight: 700;
-      padding: 12px;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.4);
-    }
-
-    /* Modal buttons */
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .modal-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .copy-btn {
-      background: #00f7ff;
-      color: #000;
-    }
-
-    .close-btn {
-      background: #ff3b3b;
-      color: #fff;
-    }
-
-    /* Responsive */
-    @media (max-width: 500px) {
-      .card {
-        padding: 25px;
+      .logo {
+        width: 90px;
+        filter: drop-shadow(0 0 15px #00f7ff);
       }
 
       .logo-text {
-        font-size: 1.2rem;
+        margin-top: 12px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        background: linear-gradient(90deg, #00f7ff, #8f00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Card */
+      .card {
+        width: 100%;
+        max-width: 380px;
+        padding: 35px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 40px rgba(0, 247, 255, 0.15);
+        text-align: center;
       }
 
       .card h1 {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+      }
+
+      .card p {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        margin-bottom: 25px;
+      }
+
+      /* Form */
+      .form-group {
+        text-align: left;
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        font-size: 0.8rem;
+        opacity: 0.8;
+      }
+
+      .form-group input {
+        width: 100%;
+        margin-top: 6px;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font-size: 0.95rem;
+      }
+
+      .form-group input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* Button */
+      .generate-btn {
+        width: 100%;
+        padding: 14px;
+        border-radius: 14px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, #00f7ff, #8f00ff);
+        color: #000;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px rgba(143, 0, 255, 0.6);
+      }
+
+      /* Footer */
+      .footer {
+        text-align: center;
+        padding: 15px;
+        font-size: 0.75rem;
+        opacity: 0.5;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal {
+        width: 90%;
+        max-width: 330px;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+        backdrop-filter: blur(18px);
+        text-align: center;
+        box-shadow: 0 0 30px rgba(0, 247, 255, 0.25);
+      }
+
+      .modal-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: #00f7ff;
+      }
+
+      .code-display {
+        margin: 20px 0;
       }
 
       .code-text {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
+        letter-spacing: 3px;
+        font-weight: 700;
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.4);
       }
-    }
-  </style>
-</head>
-<body>
-  <!-- Particle Background -->
-  <div id="particles"></div>
 
-  <!-- Main Container -->
-  <div class="container">
-    <div class="main-content">
-      <div class="logo-section">
-        <img class="logo" src="./media/pair.png" alt="CRAZY MINI MD Logo" />
-        <div class="logo-text">CRAZY MINI MD</div>
+      /* Modal buttons */
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .modal-btn {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .copy-btn {
+        background: #00f7ff;
+        color: #000;
+      }
+
+      .close-btn {
+        background: #ff3b3b;
+        color: #fff;
+      }
+
+      /* Responsive */
+      @media (max-width: 500px) {
+        .card {
+          padding: 25px;
+        }
+
+        .logo-text {
+          font-size: 1.2rem;
+        }
+
+        .card h1 {
+          font-size: 1.4rem;
+        }
+
+        .code-text {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Particle Background -->
+    <div id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <div class="main-content">
+        <div class="logo-section">
+          <img class="logo" src="./media/pair.png" alt="CRAZY MINI MD Logo" />
+          <div class="logo-text">CRAZY MINI MD</div>
+        </div>
+
+        <div class="card">
+          <h1>Link a New Device</h1>
+          <p>Enter Your WhatsApp Number</p>
+
+          <form id="pairForm">
+            <div class="form-group">
+              <label for="phoneNumber">Phone Number (with country code)</label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                placeholder="+237XXXX"
+                required
+              />
+            </div>
+
+            <button type="submit" class="generate-btn">Generate Code</button>
+          </form>
+        </div>
       </div>
 
-      <div class="card">
-        <h1>Connect WhatsApp</h1>
-        <p>Link your device using a secure pairing code</p>
+      <div class="footer">© 2025 CRAZY MINI MD — by Crazy Dev</div>
+    </div>
 
-        <form id="pairForm">
-          <div class="form-group">
-            <label for="phoneNumber">Phone Number (with country code)</label>
-            <input
-              type="tel"
-              id="phoneNumber"
-              placeholder="+241XXXX"
-              required
-            />
-          </div>
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-icon">✓</div>
+          <h2>Code Generated!</h2>
+          <p>Your pairing code is ready</p>
+        </div>
 
-          <button type="submit" class="generate-btn">Generate Code</button>
-        </form>
+        <div class="code-display">
+          <div class="code-text" id="generatedCode">DEVSENKU</div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-btn copy-btn" id="copyBtn">Copy Code</button>
+          <button class="modal-btn close-btn" id="closeBtn">Close</button>
+        </div>
       </div>
     </div>
 
-    <div class="footer">© 2025 CRAZY MINI MD — by Crazy Dev</div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-icon">✓</div>
-        <h2>Code Generated!</h2>
-        <p>Your pairing code is ready</p>
-      </div>
-
-      <div class="code-display">
-        <div class="code-text" id="generatedCode">CRAZYDEV</div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="modal-btn copy-btn" id="copyBtn">Copy Code</button>
-        <button class="modal-btn close-btn" id="closeBtn">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="./js/pair.js" type="text/javascript"></script>
-</body>
+    <script src="./js/pair.js" type="text/javascript"></script>
+  </body>
 </html>
