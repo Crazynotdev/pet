@@ -29,6 +29,7 @@ button:hover { background:#16a34a; }
 async function pair() {
   const number = document.getElementById('phone').value.trim()
   if(!number) return alert('Numéro requis')
+
   const res = await fetch(`/pair?number=${number}`)
   const data = await res.json()
   document.getElementById('code').innerText = data.code || data.error
