@@ -5,45 +5,398 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CRAZY-MINI WhatsApp</title>
 <style>
-body { font-family: Inter, Arial; display:flex; justify-content:center; align-items:center; height:100vh; background: linear-gradient(135deg,#020617,#0f172a); color:#e5e7eb; }
-.card { background:#020617; padding:28px; border-radius:18px; max-width:420px; width:100%; box-shadow:0 25px 50px rgba(0,0,0,.6); text-align:center; }
-input, button { width:100%; padding:14px; margin-top:10px; border-radius:12px; border:none; font-size:15px; }
-input { background:#020617; color:#e5e7eb; border:1px solid #1f2937; }
-button { background:#22c55e; color:#020617; font-weight:800; cursor:pointer; transition:0.3s; }
-button:hover { background:#16a34a; }
-.code { margin-top:20px; font-size:22px; font-weight:700; letter-spacing:4px; background:#111827; padding:12px; border-radius:10px; }
-.footer { margin-top:16px; font-size:13px; color:#64748b; }
+body { 
+  font-family: Inter, Arial, sans-serif; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  min-height: 100vh; 
+  background: linear-gradient(135deg, #020617, #0f172a); 
+  color: #e5e7eb; 
+  padding: 20px;
+  margin: 0;
+}
+
+.card { 
+  background: #020617; 
+  padding: 30px; 
+  border-radius: 18px; 
+  max-width: 500px; 
+  width: 100%; 
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6); 
+  text-align: center; 
+  border: 1px solid #1f2937;
+}
+
+h1 { 
+  color: #22c55e; 
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: #94a3b8;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+input, button { 
+  width: 100%; 
+  padding: 15px; 
+  border-radius: 12px; 
+  border: none; 
+  font-size: 16px; 
+  box-sizing: border-box;
+}
+
+input { 
+  background: #111827; 
+  color: #e5e7eb; 
+  border: 1px solid #374151; 
+  transition: border 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #22c55e;
+}
+
+button { 
+  background: #22c55e; 
+  color: #020617; 
+  font-weight: 800; 
+  cursor: pointer; 
+  transition: 0.3s; 
+  margin-top: 10px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button:hover { 
+  background: #16a34a; 
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  background: #475569;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.code-container {
+  margin-top: 25px;
+  background: #111827;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #374151;
+}
+
+.code-label {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.code { 
+  font-size: 28px; 
+  font-weight: 700; 
+  letter-spacing: 6px; 
+  background: #1e293b; 
+  padding: 20px; 
+  border-radius: 10px; 
+  margin: 15px 0;
+  font-family: 'Courier New', monospace;
+  color: #22c55e;
+  word-break: break-all;
+  text-align: center;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #334155;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+  display: none;
+}
+
+.instructions {
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #86efac;
+  text-align: left;
+}
+
+.instructions h3 {
+  margin-top: 0;
+  color: #22c55e;
+  font-size: 14px;
+}
+
+.instructions ol {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+
+.instructions li {
+  margin-bottom: 8px;
+}
+
+.footer { 
+  margin-top: 25px; 
+  font-size: 13px; 
+  color: #64748b; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.count {
+  background: rgba(30, 41, 59, 0.5);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.loading {
+  display: none;
+  margin: 10px auto;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #334155;
+  border-top-color: #22c55e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.copy-btn {
+  background: #3b82f6;
+  width: auto;
+  padding: 8px 20px;
+  font-size: 14px;
+  margin-top: 10px;
+  display: none;
+}
+
+.copy-btn:hover {
+  background: #2563eb;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 20px;
+  }
+  
+  .code {
+    font-size: 22px;
+    letter-spacing: 4px;
+    padding: 15px;
+  }
+}
 </style>
 </head>
 <body>
 <div class="card">
-<h1>CRAZY-MINI</h1>
-<p>Connexion WhatsApp via Pair Code</p>
-<input id="phone" placeholder="241XXXXXXXX">
-<button onclick="pair()">Générer le code</button>
-<div id="code" class="code">---</div>
-<div id="count" class="footer">0 / 40 utilisateurs connectés</div>
+  <h1>🤖 CRAZY-MINI</h1>
+  <p class="subtitle">Connexion WhatsApp via Pair Code</p>
+  
+  <div class="input-group">
+    <label for="phone">Numéro WhatsApp (format international)</label>
+    <input id="phone" placeholder="Exemple: 24101234567" type="tel">
+  </div>
+  
+  <button onclick="pair()" id="pair-btn">Générer le code de pairing</button>
+  <div class="loading" id="loading"></div>
+  <div class="error" id="error"></div>
+  
+  <div class="code-container">
+    <span class="code-label">CODE DE PAIRING :</span>
+    <div id="code" class="code">---</div>
+    <button class="copy-btn" id="copy-btn" onclick="copyCode()">📋 Copier</button>
+  </div>
+  
+  <div class="instructions">
+    <h3>Instructions :</h3>
+    <ol>
+      <li>Entrez votre numéro WhatsApp (sans le +)</li>
+      <li>Cliquez sur "Générer le code"</li>
+      <li>Sur WhatsApp, allez dans :</li>
+      <li><strong>Paramètres → Périphériques connectés → Connecter un appareil</strong></li>
+      <li>Entrez le code à 6 chiffres affiché ci-dessus</li>
+    </ol>
+  </div>
+  
+  <div class="footer">
+    <div>Version 1.0</div>
+    <div id="count" class="count">Chargement...</div>
+  </div>
 </div>
 
 <script>
-async function pair() {
-  const number = document.getElementById('phone').value.trim()
-  if(!number) return alert('Numéro requis')
+let currentCode = '';
 
-  const res = await fetch(`/pair?number=${number}`)
-  const data = await res.json()
-  document.getElementById('code').innerText = data.code || data.error
-  updateCount()
+async function pair() {
+  const number = document.getElementById('phone').value.trim();
+  if (!number) {
+    showError('Veuillez entrer un numéro WhatsApp');
+    return;
+  }
+  
+  // Validation basique du numéro
+  if (!/^\d{8,15}$/.test(number)) {
+    showError('Format invalide. Entrez uniquement les chiffres (ex: 24101234567)');
+    return;
+  }
+  
+  // Afficher le loading
+  const btn = document.getElementById('pair-btn');
+  const loading = document.getElementById('loading');
+  const errorDiv = document.getElementById('error');
+  
+  btn.disabled = true;
+  btn.textContent = 'Génération en cours...';
+  loading.style.display = 'block';
+  errorDiv.style.display = 'none';
+  
+  // Effacer l'ancien code
+  document.getElementById('code').textContent = '---';
+  document.getElementById('copy-btn').style.display = 'none';
+  currentCode = '';
+  
+  try {
+    const response = await fetch(`/pair?number=${encodeURIComponent(number)}`);
+    const data = await response.json();
+    
+    console.log('Réponse du serveur:', data);
+    
+    if (data.code) {
+      // Afficher le code
+      currentCode = data.code;
+      document.getElementById('code').textContent = data.code;
+      document.getElementById('copy-btn').style.display = 'block';
+      
+      // Démarrer un compte à rebours (code valide 60 secondes)
+      startCountdown(60);
+      
+    } else if (data.error) {
+      showError('Erreur: ' + data.error);
+    } else {
+      showError('Réponse inattendue du serveur');
+    }
+    
+  } catch (error) {
+    console.error('Erreur réseau:', error);
+    showError('Erreur de connexion au serveur');
+  } finally {
+    // Réactiver le bouton
+    btn.disabled = false;
+    btn.textContent = 'Générer le code de pairing';
+    loading.style.display = 'none';
+    updateCount();
+  }
+}
+
+function showError(message) {
+  const errorDiv = document.getElementById('error');
+  errorDiv.textContent = message;
+  errorDiv.style.display = 'block';
+  
+  // Cacher l'erreur après 5 secondes
+  setTimeout(() => {
+    errorDiv.style.display = 'none';
+  }, 5000);
+}
+
+function copyCode() {
+  if (!currentCode) return;
+  
+  navigator.clipboard.writeText(currentCode).then(() => {
+    const btn = document.getElementById('copy-btn');
+    const originalText = btn.textContent;
+    btn.textContent = '✅ Copié !';
+    btn.style.background = '#10b981';
+    
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '#3b82f6';
+    }, 2000);
+  }).catch(err => {
+    console.error('Erreur copie:', err);
+    showError('Impossible de copier');
+  });
+}
+
+function startCountdown(seconds) {
+  const codeElement = document.getElementById('code');
+  const originalCode = currentCode;
+  let remaining = seconds;
+  
+  const timer = setInterval(() => {
+    if (remaining <= 0) {
+      clearInterval(timer);
+      if (currentCode === originalCode) {
+        codeElement.innerHTML = '<span style="color:#ef4444">Code expiré</span>';
+        document.getElementById('copy-btn').style.display = 'none';
+        currentCode = '';
+      }
+      return;
+    }
+    
+    // Afficher le code avec compte à rebours
+    codeElement.innerHTML = `${originalCode}<br><small style="color:#94a3b8;font-size:12px;letter-spacing:0">Expire dans ${remaining}s</small>`;
+    remaining--;
+  }, 1000);
 }
 
 async function updateCount() {
-  const res = await fetch('/count')
-  const data = await res.json()
-  document.getElementById('count').innerText = `${data.count} / ${data.max} utilisateurs connectés`
+  try {
+    const res = await fetch('/count');
+    const data = await res.json();
+    document.getElementById('count').textContent = `${data.count || 0} / ${data.max || 40} sessions`;
+  } catch (error) {
+    console.error('Erreur count:', error);
+  }
 }
 
-setInterval(updateCount, 5000)
-updateCount()
+// Mettre à jour le compteur toutes les 10 secondes
+setInterval(updateCount, 10000);
+
+// Mettre à jour au chargement
+updateCount();
+
+// Permettre d'appuyer sur Entrée
+document.getElementById('phone').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    pair();
+  }
+});
 </script>
 </body>
 </html>
