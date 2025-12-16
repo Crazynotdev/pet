@@ -11,7 +11,7 @@ const MAX_SESSIONS = 40
 const sessions = new Map()
 let sock
 
-// Initialise le socket WhatsApp
+// hm
 async function initWA() {
   const { state, saveCreds } = await useMultiFileAuthState('./auth')
   const { version } = await fetchLatestBaileysVersion()
@@ -38,25 +38,23 @@ async function initWA() {
 
 await initWA()
 
-// Endpoint pour générer le pair code
 app.get('/pair', async (req, res) => {
   try {
     const number = req.query.number
     if (!number) return res.json({ error: 'Numéro requis' })
 
     if (!sock) return res.json({ error: 'Socket WhatsApp non prêt, réessaie' })
-
-    // Écouter l'événement pairing.update UNE SEULE FOIS pour cette requête
+    
     sock.ev.once('pairing.update', (update) => {
       if (update.code) {
-        // Envoyer le code au client
+        
         res.json({ code: update.code })
       } else if (update.timeout) {
         res.json({ error: 'Timeout lors du pairing' })
       }
     })
 
-    // Lancer le pairing avec timeout
+    //  timeout
     await sock.requestPairingCode(number)
 
     // Timeout de sécurité
