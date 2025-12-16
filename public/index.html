@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRAZY-MINI WhatsApp</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;font-family:Inter}
+body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
+.card{background:#020617;border:1px solid #1f2937;border-radius:20px;padding:30px;width:100%;max-width:450px;box-shadow:0 25px 50px rgba(0,0,0,.6);}
+h1{margin:0 0 10px;font-size:28px;font-weight:800;text-align:center;}
+p{margin:0 0 20px;color:#94a3b8;text-align:center;}
+input,button{width:100%;padding:14px;border-radius:12px;border:none;font-size:15px;margin-top:10px}
+input{background:#020617;border:1px solid #1f2937;color:#e5e7eb}
+button{background:#22c55e;color:#020617;font-weight:800;cursor:pointer;transition:0.3s}
+button:hover{background:#16a34a}
+.code{margin-top:20px;text-align:center;font-size:22px;font-weight:700;letter-spacing:4px;background:#111827;padding:12px;border-radius:10px}
+.footer{text-align:center;margin-top:16px;font-size:13px;color:#64748b}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>CRAZY-MINI</h1>
+<p>Connexion WhatsApp via Pair Code</p>
+<input id="phone" placeholder="241XXXXXXXX" />
+<button onclick="pair()">Générer le code</button>
+<div id="code" class="code">---</div>
+<div id="count" class="footer">0 / 40 utilisateurs connectés</div>
+</div>
+
+<script>
+async function pair(){
+  const number = document.getElementById('phone').value.trim();
+  if(!number)return alert('Numéro requis');
+  const res = await fetch(`/pair?number=${number}`);
+  const data = await res.json();
+  document.getElementById('code').innerText = data.code || data.error;
+  updateCount();
+}
+async function updateCount(){
+  const res = await fetch('/count');
+  const data = await res.json();
+  document.getElementById('count').innerText = `${data.count} / ${data.max} utilisateurs connectés`;
+}
+setInterval(updateCount,5000);
+updateCount();
+</script>
+</body>
+</html>
