@@ -1,6 +1,5 @@
 import express from 'express'
 import pino from 'pino'
-import fs from 'fs'
 import { makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion } from '@whiskeysockets/baileys'
 import { handleCommand } from '../js/commands.js'
 
@@ -10,46 +9,69 @@ app.use(express.static('public'))
 
 const MAX_SESSIONS = 40
 const sessions = new Map()
+let sock
 
-async function createSession(number){
-  if(sessions.has(number)) return sessions.get(number)
-  if(sessions.size >= MAX_SESSIONS) throw new Error('Limite de sessions atteinte')
-
-  const path = `./sessions/user-${number}`
-  const { state, saveCreds } = await useMultiFileAuthState(path)
+// Initialise le socket WhatsApp
+async function initWA() {
+  const { state, saveCreds } = await useMultiFileAuthState('./auth')
   const { version } = await fetchLatestBaileysVersion()
 
-  const sock = makeWASocket({ auth: state, version, logger: pino({ level:'silent' }) })
+  sock = makeWASocket({
+    logger: pino({ level: 'silent' }),
+    auth: state,
+    version
+  })
 
   sock.ev.on('creds.update', saveCreds)
 
   sock.ev.on('messages.upsert', async ({ messages }) => {
     const msg = messages[0]
-    if(!msg.message || msg.key.fromMe) return
-    const text = msg.message.conversation || msg.message.extendedTextMessage?.text
-    if(!text) return
-    const cmd = text.split(' ')[0].toLowerCase()
-    await handleCommand(sock,msg,cmd)
-  })
+    if (!msg.message || msg.key.fromMe) return
 
-  sessions.set(number,sock)
-  return sock
+    const text = msg.message.conversation || msg.message.extendedTextMessage?.text
+    if (!text) return
+
+    const cmd = text.split(' ')[0].toLowerCase()
+    await handleCommand(sock, msg, cmd)
+  })
 }
 
-app.get('/pair', async (req,res)=>{
-  try{
+await initWA()
+
+// Endpoint pour générer le pair code
+app.get('/pair', async (req, res) => {
+  try {
     const number = req.query.number
-    if(!number) return res.json({ error:'Numéro requis' })
-    const sock = await createSession(number)
-    const code = await sock.generateCode(number)
-    res.json({ code })
-  }catch(e){
-    res.json({ error:e.message })
+    if (!number) return res.json({ error: 'Numéro requis' })
+
+    if (!sock) return res.json({ error: 'Socket WhatsApp non prêt, réessaie' })
+
+    // Méthode pro pour générer le pair code
+    let code
+    sock.ev.once('pairing.update', (update) => {
+      if (update.qr) {
+        code = update.qr
+        res.json({ code })
+      }
+    })
+
+    // Lancer le pairing
+    await sock.generateCode(number)
+
+    // Stocke la session
+    if (!sessions.has(number)) {
+      sessions.set(number, sock)
+      if (sessions.size > MAX_SESSIONS) sessions.delete(number)
+    }
+
+  } catch (e) {
+    res.json({ error: e.message })
   }
 })
 
-app.get('/count',(req,res)=>{
+// Compte des sessions
+app.get('/count', (req, res) => {
   res.json({ count: sessions.size, max: MAX_SESSIONS })
 })
 
-app.listen(3000,()=>console.log('🚀 CRAZY-MINI SaaS ON http://localhost:3000'))
+app.listen(3000, () => console.log('🚀 CRAZY-MINI en ligne sur http://localhost:3000'))
