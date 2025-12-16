@@ -41,7 +41,7 @@ app.get('/pair', async (req,res)=>{
     const number = req.query.number
     if(!number) return res.json({ error:'Numéro requis' })
     const sock = await createSession(number)
-    const code = await sock.requestPairingCode(number)
+    const code = await sock.generateCode(number)
     res.json({ code })
   }catch(e){
     res.json({ error:e.message })
