@@ -46,25 +46,26 @@ app.get('/pair', async (req, res) => {
 
     if (!sock) return res.json({ error: 'Socket WhatsApp non prêt, réessaie' })
 
-    // Méthode pro pour générer le pair code
-    let code
+    // Écouter l'événement pairing.update UNE SEULE FOIS pour cette requête
     sock.ev.once('pairing.update', (update) => {
-      if (update.qr) {
-        code = update.qr
-        res.json({ code })
+      if (update.code) {
+        // Envoyer le code au client
+        res.json({ code: update.code })
+      } else if (update.timeout) {
+        res.json({ error: 'Timeout lors du pairing' })
       }
     })
 
-    // Lancer le pairing
-    await sock.generateCode(number)
+    // Lancer le pairing avec timeout
+    await sock.requestPairingCode(number)
 
-    // Stocke la session
-    if (!sessions.has(number)) {
-      sessions.set(number, sock)
-      if (sessions.size > MAX_SESSIONS) sessions.delete(number)
-    }
+    // Timeout de sécurité
+    setTimeout(() => {
+      res.json({ error: 'Timeout - Aucun code reçu' })
+    }, 30000)
 
   } catch (e) {
+    console.error('Erreur pairing:', e)
     res.json({ error: e.message })
   }
 })
